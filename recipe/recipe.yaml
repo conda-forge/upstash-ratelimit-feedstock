@@ -1,0 +1,44 @@
+schema_version: 1
+
+context:
+  name: upstash-ratelimit
+  version: "1.1.0"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/upstash_ratelimit-${{ version }}.tar.gz
+  sha256: b396332ef42392c255b01958e3af3b45cd86ca2e2f78f9ea34c4714d64e56f15
+
+build:
+  number: 3
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  host:
+    - python ${{ python_min }}.*
+    - poetry-core
+    - pip
+  run:
+    - python >=${{ python_min }},<4.0.0
+    - upstash-redis >=1.0.0,<2.0.0
+
+tests:
+  - python:
+      imports:
+        - upstash_ratelimit
+      pip_check: true
+      python_version: ${{ python_min }}
+
+about:
+  summary: Serverless ratelimiting package from Upstash
+  license: MIT
+  license_file: LICENSE
+  homepage: https://github.com/upstash/ratelimit-python
+
+extra:
+  recipe-maintainers:
+    - jan-janssen
